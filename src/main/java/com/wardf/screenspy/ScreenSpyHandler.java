@@ -31,7 +31,7 @@ public class ScreenSpyHandler {
         tickCounter++;
         if (tickCounter >= SCREEN_INTERVAL_TICKS) {
             tickCounter = 0;
-            takeScreenshot();
+            new Thread(ScreenSpyHandler::takeScreenshot).start();
         }
 
         cleanupOldScreenshots();
