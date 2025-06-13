@@ -8,7 +8,11 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.IntBuffer;
@@ -31,7 +35,7 @@ public class ScreenSpyHandler {
         tickCounter++;
         if (tickCounter >= SCREEN_INTERVAL_TICKS) {
             tickCounter = 0;
-            new Thread(ScreenSpyHandler::takeScreenshot).start();
+            takeScreenshot(); // BEZ new Thread tutaj
         }
 
         cleanupOldScreenshots();
@@ -50,20 +54,63 @@ public class ScreenSpyHandler {
             int[] pixels = new int[width * height];
             buffer.get(pixels);
 
-            BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    int i = x + (height - y - 1) * width;
-                    image.setRGB(x, y, pixels[i]);
-                }
-            }
+            // Przenieś ten fragment do osobnego wątku:
+            new Thread(() -> {
+                try {
+                    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+                    for (int y = 0; y < height; y++) {
+                        for (int x = 0; x < width; x++) {
+                            int i = x + (height - y - 1) * width;
+                            image.setRGB(x, y, pixels[i]);
+                        }
+                    }
 
-            if (!SCREEN_DIR.exists()) SCREEN_DIR.mkdirs();
-            File output = new File(SCREEN_DIR, FORMATTER.format(new Date()) + ".png");
-            ImageIO.write(image, "png", output);
-            storedScreenshots.add(new FileTimePair(output, System.currentTimeMillis()));
+                    if (!SCREEN_DIR.exists()) SCREEN_DIR.mkdirs();
+                    File output = new File(SCREEN_DIR, FORMATTER.format(new Date()) + ".png");
+
+                    // Zaawansowana kompresja PNG
+                    Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
+                    if (writers.hasNext()) {
+                        ImageWriter writer = writers.next();
+                        ImageWriteParam param = writer.getDefaultWriteParam();
+
+                        // PNG compression is lossless, but we can still optimize size via compression mode.
+                        param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+                        param.setCompressionQuality(0.9f); // od 0.0 (max kompresja) do 1.0 (najlepsza jakość, większy plik)
+
+                        try (ImageOutputStream ios = ImageIO.createImageOutputStream(output)) {
+                            writer.setOutput(ios);
+                            writer.write(null, new IIOImage(image, null, null), param);
+                        }
+
+                        writer.dispose();
+                    }
+
+                    storedScreenshots.add(new FileTimePair(output, System.currentTimeMillis()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
+
+
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void deleteOldScreenshotsOnStartup() {
+        if (!SCREEN_DIR.exists()) return;
+
+        long now = System.currentTimeMillis();
+        File[] files = SCREEN_DIR.listFiles((dir, name) -> name.endsWith(".png"));
+
+        if (files != null) {
+            for (File file : files) {
+                long age = now - file.lastModified();
+                if (age >= 1800 * 1000L) { // 30 minut
+                    file.delete();
+                }
+            }
         }
     }
 
