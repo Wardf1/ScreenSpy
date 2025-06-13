@@ -33,10 +33,3 @@ Dostępne opcje:
 - Forge **1.12.2-14.23.5.2768** lub **nowszy** (np. 2860)
 
 ---
-
-## 🛠 Kompilacja (dla devów)
-
-### 1. Klonuj repo:
-```bash
-git clone https://github.com/Wardf1/ScreenSpy.git
-cd ScreenSpy
