@@ -37,17 +37,9 @@ retentionSeconds=1800
 
 ## 🧪 Wymagania
 
-- Minecraft Forge `1.12.2-14.23.5.2768` lub wyżej (testowane na `14.23.5.2860`)
+- Minecraft Forge `1.12.2-14.23.5.2768` lub wyżej.
 - Java 8
 - Tylko **klient** (nie działa po stronie serwera)
-
-## 🔧 Budowanie
-
-```bash
-./gradlew build
-```
-
-Wynikowy plik `.jar` znajdziesz w `build/libs/`.
 
 ---
 
