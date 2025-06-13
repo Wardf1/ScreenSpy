@@ -1,35 +1,56 @@
-# 📸 ScreenSpy (Minecraft Forge 1.12.2)
+# 🖼 ScreenSpy – Forge 1.12.2
 
-**ScreenSpy** to mod klientowy dla Minecraft Forge 1.12.2, który automatycznie wykonuje zrzuty ekranu całego ekranu co 1 sekundę i usuwa je po określonym czasie. Idealny do debugowania, monitorowania lub... szpiegowania siebie 😎
+Mod kliencki do Minecraft Forge 1.12.2, który **automatycznie wykonuje zrzuty ekranu co 1 sekundę** i zapisuje je do folderu `.minecraft/screenshots/screenspy/`.
+
+## ✨ Funkcje
+
+- 📸 Automatyczny screenshot co 1 sekundę (20 ticków).
+- 💾 Zapisywanie plików do `./screenshots/screenspy/<data>-<godzina>.png`.
+- 🗑️ Automatyczne czyszczenie starych zrzutów po określonym czasie (`retentionSeconds`).
+- 🧹 Usuwanie zbyt starych plików (>30 minut) przy starcie launchera.
+- 🧮 Kompresja PNG – mniejsze pliki, bez utraty jakości.
+- 🎛️ Możliwość przełączania trybu (ON/OFF) klawiszem **F9**.
+- 🧩 Konfigurowalne w `screenspy.cfg`.
+
+## 🧷 Sterowanie
+
+| Klawisz | Funkcja                      |
+|--------:|------------------------------|
+| `F9`    | Przełączenie nagrywania ON/OFF |
+
+## ⚙️ Konfiguracja (`config/screenspy.cfg`)
+
+```cfg
+# Czas trzymania screenshotów w sekundach
+retentionSeconds=1800
+```
+
+## 🗂 Lokalizacja zrzutów
+
+```
+.minecraft/
+└── screenshots/
+    └── screenspy/
+        ├── 2025-06-13_21-55-00.png
+        ├── ...
+```
+
+## 🧪 Wymagania
+
+- Minecraft Forge `1.12.2-14.23.5.2768` lub wyżej (testowane na `14.23.5.2860`)
+- Java 8
+- Tylko **klient** (nie działa po stronie serwera)
+
+## 🔧 Budowanie
+
+```bash
+./gradlew build
+```
+
+Wynikowy plik `.jar` znajdziesz w `build/libs/`.
 
 ---
 
-## 🧰 Funkcje
+## 📖 Licencja
 
-- 📷 Screenshot co 1 sekundę (pełny ekran gry)
-- 🗑️ Automatyczne usuwanie plików po określonym czasie (domyślnie 60 sekund)
-- 🎛️ Przycisk w menu pauzy [ESC] do włączania/wyłączania działania moda
-- 📁 Screenshoty zapisywane w `.minecraft/screenshots/screenspy/`
-- ⚙️ Konfigurowalne przez `screenspy.cfg`
-
----
-
-## 🔧 Konfiguracja (`screenspy.cfg`)
-
-Plik zostanie utworzony automatycznie w folderze:
-`<GameDir>/config/screenspy.cfg`
-
-Dostępne opcje:
-
-| Opcja              | Domyślna | Opis                                        |
-|-------------------|----------|---------------------------------------------|
-| `retentionSeconds`| `60`     | Czas (w sekundach), po którym screenshoty są usuwane |
-
----
-
-## 📦 Wymagania
-
-- Minecraft **1.12.2**
-- Forge **1.12.2-14.23.5.2768** lub **nowszy** (np. 2860)
-
----
+MIT © Wardf
