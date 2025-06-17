@@ -1,11 +1,11 @@
 # 🖼 ScreenSpy – Forge 1.12.2
 
-Mod kliencki do Minecraft Forge 1.12.2, który **automatycznie wykonuje zrzuty ekranu co 1 sekundę** i zapisuje je do folderu `.minecraft/screenshots/screenspy/`.
+Mod kliencki do Minecraft Forge 1.12.2, który **automatycznie wykonuje zrzuty ekranu co 1 sekundę** i zapisuje je do folderu `.<client_folder>/screenshots/screenspy/`.
 
 ## ✨ Funkcje
 
 - 📸 Automatyczny screenshot co 1 sekundę (20 ticków).
-- 💾 Zapisywanie plików do `./screenshots/screenspy/<data>-<godzina>.png`.
+- 💾 Zapisywanie plików do `./screenshots/screenspy/<data>-<godzina>.png` lub `./screenshots/screenspy/<data>-<godzina>.jpg`
 - 🗑️ Automatyczne czyszczenie starych zrzutów po określonym czasie (`retentionSeconds`).
 - 🧹 Usuwanie zbyt starych plików (>30 minut) przy starcie launchera.
 - 🧮 Kompresja PNG – mniejsze pliki, bez utraty jakości.
